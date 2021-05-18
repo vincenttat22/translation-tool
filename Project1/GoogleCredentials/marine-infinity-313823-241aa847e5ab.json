@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "marine-infinity-313823",
+  "private_key_id": "241aa847e5ab28aa1345da7d0b39d232a305a16f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDMgo3u/CpRb34C\ntznqzea9ASjX2QwzXQMfegoBLuEt5rUVPdK8NwwOuB6+8cT80CXd8N+eas5atvZ0\nNt6c+4nZR7zyLMBmfl7jA3rwjdVUTX18rT2j8CWC5o+U5whJMvPnJi9gDBVSyrTj\n0btR1f/iMhfyqwLGzllYbYbD93MUyywI+Pjz1KZI19n4StPlBTqj40aR9DeTaRvv\nVoeuJC0KL45NclNo9w9FVvORS8Kovv9evw3ArhvLe7ragTIc3Sk2yDrBnHzU+ySh\nhX7okyTzQpGza+uf/CSFeATyQ4e7MYnfKrFT7i5wJjfbragmOaUiC6Txs3U65KAu\nwSy7xzLjAgMBAAECggEANHi+z/WVKgXQMAQw8QTZUd8tSoxe7ALOXVIjpQAROIS8\nK3IMUsxQ5KnrAZTotPD29kXqKiw/O9k7zL+TSHXlfYFBgmVnDCUaVWa8MWJCvPmQ\n299bNGfWSAq+Bjds0dMn70PF3f/brL1jwhw60pl0qOWvbUzhTn79P4oCjN89gLTW\nUNHjb0AsaoL6sci0tdzNT1dSNtA5Wh65VTSDH5av7Q01Z6lciGCLEbiVBINkBYXl\nl16L8nN3YBz+MoOHoZ2xfBsn+uPlqhiNSfsLnjwcHUZFcrtLUrFeDrM0WBRgpcTQ\nOTvz47AqP5UOvcbtMgEuLU3NP2KZlsOE0V8qx91Q2QKBgQD9yWZ9BOGIMldH1LE2\n60RRUNBQVzxW3FKqPygXszzCQ+XcsVRcLyJVIIPT8TDCRvQEJ2ZvzoFCemHC133R\n8oDOfFApNd/f9/JyhlslHkL0sjVX4BbqVXTFzg4fSMQHegBI5P8xejgsXt+n9Ohs\nasBfmvUiXKPasGKq/YIAmcBf7wKBgQDOSyPEhY5xZrLqRv2tIqdsSJMkyKo0I+Vi\nRFFy4u2i1cyxlNP8plmdcQ8glUZOm1e+zSNPqWFr9zH1N8z57kPD6uNuL60TR5oo\n9KhW8GTT3bDRP5UJ2PVuhLowwp9qa6WCG18zL3B2qRrc5O7vBGDNlOl/gQsFgLtc\nS1tlc+MoTQKBgDKH/GEeLK3KoDhMMDDoLUUnmyK0C+6bldYSFzCI3qsri8QihtKI\nDAT5IWZ82qGEMSf2lF3ktzX+WiLKd2HrMBxtAiUCdh4JJ3wIJnPAj8JbDWX+13E3\nLLYJ7iPqgCWg9BePiQRX+oFTLqMpj3Gu27jtiKub2IA9qJe1PEJUWsp/AoGBALwf\n78VGmmi15BEbnjjmclGgOXeA+x5DYerkLHadlWI6oMmM1GkBdpXKRaZMGuqSZUld\nn4cFCw+/RLLAKU/+xZODv9V66tW7JU2WF3H5FanT8GxSFGL/lIotxfGzelc9RZjJ\nx15RM7kya4nnyDD2CCVSWEFrd5aUF8iJ/BYfwZa9AoGBAMiRRc1yYzUp3qD892e4\n9PbY/KDhr3kCL9HIYnk0paUJazghh06cGOV+I4Nncd6vIkZw/bLXJPSbThzi9L1z\nsIQ4vsxgGwsTaX2Ew3aCsDS6viSOfwQrjH30QD5ptuQBgCybqOB3r2kox1quF9Rd\noVaGptV87YLQ/H0E4G3LNSg2\n-----END PRIVATE KEY-----\n",
+  "client_email": "translation-tool@marine-infinity-313823.iam.gserviceaccount.com",
+  "client_id": "112353523900862865325",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/translation-tool%40marine-infinity-313823.iam.gserviceaccount.com"
+}

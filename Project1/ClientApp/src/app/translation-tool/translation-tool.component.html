@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h4>Translation</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4 upload-section">
+      <div>
+        <input type="file" #file placeholder="Choose file" multiple (change)="uploadFile(file.files)" style="display:none;">
+        <button type="button" class="btn btn-primary" (click)="file.click()">Upload File</button>
+      </div>
+      <div>
+        <span class="upload" *ngIf="progress > 0">
+          {{progress}}%
+        </span>
+        <span class="upload" *ngIf="message">
+          {{message}}
+        </span>
+      </div>
+      <div>
+        <button class="btn btn-primary" (click)="onTranslate()">Translate</button>
+      </div>
+    </div>
+  </div>
+</div>

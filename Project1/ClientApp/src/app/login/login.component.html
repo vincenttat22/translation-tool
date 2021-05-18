@@ -1,0 +1,29 @@
+<div class="container login-container">
+    <div class="form-body">
+    <div class="row">
+        <div class="form-holder">
+            <div class="form-content">
+                <div class="form-items">
+                    <h3>Login</h3>
+                    <p>Fill in the data below.</p>
+                    <form #form='ngForm' class="requires-validation" novalidate autocomplete="off" (submit)="onSubmit(form)">
+
+                        <div class="col-md-12">
+                            <input class="form-control" type="text" name="UserName" #UserName="ngModel" [(ngModel)]="formModel.UserName" placeholder="Login with user name Or email" required >
+                        </div>
+
+                        <div class="col-md-12">
+                            <input class="form-control" type="password" name="password" #Password="ngModel" [(ngModel)]="formModel.Password" placeholder="Password" required>
+                            <div class="error_msg">{{errorMessage}}</div>
+                        </div>
+
+                        <div class="form-button mt-3">
+                            <button id="submit" type="submit" class="btn btn-primary" [disabled]="form.invalid">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
