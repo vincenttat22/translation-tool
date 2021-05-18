@@ -11,6 +11,7 @@ namespace Project1.Models
     public interface ISrtEditor
     {
         SrtData ParseSrt(string path);
+        string GetFirstLine(string srtPath);
         string WriteSrt(List<SrtModel> srtContent, IList<TranslationResult> translationResults, string srtPath);
     }
 
@@ -79,6 +80,41 @@ namespace Project1.Models
             return srtData;
         }
 
+        public string GetFirstLine(string srtPath)
+        {
+            string line;
+            string strBody = null;
+            using (FileStream fs = new FileStream(srtPath, FileMode.Open))
+            {
+                using StreamReader sr = new StreamReader(fs, Encoding.Default);       
+                StringBuilder sb = new StringBuilder();
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (!line.Equals(""))
+                    {
+                        sb.Append(line).Append("@");
+                    }
+                    else
+                    {
+                        string[] parseStrs = sb.ToString().Split('@');
+                        if (parseStrs.Length < 3)
+                        {
+                            sb.Remove(0, sb.Length);// Clear, otherwise it will affect the analysis of the next subtitle element</i>  
+                        }
+                        else
+                        {
+                            for (int i = 2; i < parseStrs.Length; i++)
+                            {
+                                strBody += parseStrs[i];
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        
+            return strBody;
+        }
         public string WriteSrt(List<SrtModel> srtContent, IList<TranslationResult> translationResults, string srtPath)
         {
             var fileName = Path.Combine(srtPath,DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString() + ".srt");

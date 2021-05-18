@@ -13,5 +13,7 @@ namespace Project1.Models
         }
 
         public DbSet<FileManagement> FileManagement { get; set; }
+
+        public DbSet<ExportFiles> ExportFiles { get; set; }
     }
 }

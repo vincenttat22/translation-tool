@@ -4,3 +4,25 @@
     padding-top: 5px;
     padding-bottom: 5px;
 }
+
+  .input-file {
+    border-top: 1px solid grey;
+  }
+  .input-file:hover {
+    cursor: pointer;
+  }
+  .input-file-selected {
+    background: #dbdbdb;
+    color: #1669bb;
+  }
+  .input-list {
+    height: 400px;
+    overflow: auto;
+  }
+  
+  table {
+    width: 100%;
+  }
+  table .mat-header-cell {
+      background: white;
+  }

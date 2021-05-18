@@ -19,7 +19,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Users\\vincent.tat\\Project1\\Project1\\GoogleCredentials\\marine-infinity-313823-241aa847e5ab.json",
+        "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Users\\vincent.tat\\Project1\\Project1\\GoogleCredentials\\marine-infinity-313823-bb3b3727b8f3.json",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:5000"

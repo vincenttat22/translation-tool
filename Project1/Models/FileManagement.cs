@@ -25,10 +25,10 @@ namespace Project1.Models
         public string FilePath { get; set; }
 
         [Column(TypeName = "nvarchar(5)")]
-        public string type { get; set; }
+        public string FileType { get; set; }
 
         [Column(TypeName = "nvarchar(10)")]
-        public string languageCode { get; set; }
+        public string LanguageCode { get; set; }
 
         [Column(TypeName = "datetime2")]
         public DateTime CreatedDate { get; set; }

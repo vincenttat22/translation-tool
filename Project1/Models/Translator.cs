@@ -12,6 +12,8 @@ namespace Project1.Models
         string TranslateText(string text, string language);
         string TranslateHtml(string text, string language);
         IList<TranslationResult> TranslateListText(List<string>texts, string language);
+        IList<Detection> DetectLanguages(List<string> text);
+        Detection DetectLanguage(string text);
         IList<Language> GetLanguages();
     }
     public class ApiLanguage
@@ -46,6 +48,18 @@ namespace Project1.Models
         public IList<TranslationResult> TranslateListText(List<string> text, string language)
         {
             IList<TranslationResult> results = client.TranslateText(text, language);
+            return results;
+        }
+
+        public IList<Detection> DetectLanguages(List<string> text)
+        {
+            IList<Detection> results = client.DetectLanguages(text);
+            return results;
+        }
+
+        public Detection DetectLanguage(string text)
+        {
+            Detection results = client.DetectLanguage(text);
             return results;
         }
     }

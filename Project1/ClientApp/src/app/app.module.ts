@@ -15,6 +15,8 @@ import { AuthInterceptor } from './authentication/auth.interceptor';
 import { AdminComponent } from './admin/admin.component';
 import { ApiService } from './services/api.service';
 import { TranslationToolComponent } from './translation-tool/translation-tool.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material';
 
 @NgModule({
   declarations: [		
@@ -31,6 +33,7 @@ import { TranslationToolComponent } from './translation-tool/translation-tool.co
     FormsModule,
     AvatarModule,
     NgbModule,
+    MatTableModule,
     RouterModule.forRoot([
       {
         path: "",
@@ -56,7 +59,8 @@ import { TranslationToolComponent } from './translation-tool/translation-tool.co
         path: "login",
         component: LoginComponent
       }
-    ])
+    ]),
+    BrowserAnimationsModule
   ],
   providers: [ApiService,{
     provide: HTTP_INTERCEPTORS,

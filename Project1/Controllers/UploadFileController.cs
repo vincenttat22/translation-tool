@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Google.Cloud.Translation.V2;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Project1.Models;
 using System;
@@ -22,19 +24,22 @@ namespace Project1.Controllers
         private readonly IOptions<AppSettings> _appSettings;
         private readonly ApplicationContext _applicationContext;
         private readonly string userId = "";
-        public UploadFileController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<AppSettings> appSettings, IHttpContextAccessor httpContextAccessor, ApplicationContext applicationContext)
+        private readonly ITranslator _translator;
+        private readonly ISrtEditor _srtEditor;
+        public UploadFileController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<AppSettings> appSettings, IHttpContextAccessor httpContextAccessor, ApplicationContext applicationContext, ITranslator translator, ISrtEditor srtEditor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _appSettings = appSettings;
             _applicationContext = applicationContext;
             userId = httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == "UserId")?.Value;
+            _translator = translator;
+            _srtEditor = srtEditor;
         }
 
         [HttpPost]
-        [Route("Subtitile")]
         [Authorize]
-        public async Task<IActionResult> UploadSRT()
+        public async Task<ActionResult> UploadSRT()
         {
            try
             {
@@ -42,7 +47,8 @@ namespace Project1.Controllers
                 var files = formCollection.Files;
                 var folderName = Path.Combine("Uploads", userId);
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                List<FilePath> filePaths = new();
+                List<FileManagement> fileDetails = new();
+                List<string> texts = new();
                 if (!Directory.Exists(folderName))
                 {
                     Directory.CreateDirectory(folderName);
@@ -60,23 +66,39 @@ namespace Project1.Controllers
                     var dbPath = Path.Combine(folderName, fileName);
                     using var stream = new FileStream(fullPath, FileMode.Create);
                     file.CopyTo(stream);
-                    FileManagement fileDetail = new()
+                    stream.Close();
+                    string text = _srtEditor.GetFirstLine(dbPath);
+                    texts.Add(text);
+                    fileDetails.Add(new()
                     {
                         UserId = userId,
                         OriginalFileName = ofileName,
                         FileName = fileName,
                         FilePath = dbPath,
+                        FileType = "input",
                         CreatedDate = DateTime.UtcNow
-                    };
-                    _applicationContext.FileManagement.Add(fileDetail);
-                    filePaths.Add(new FilePath(ofileName, fileName, dbPath));
+                    });
+                }
+                IList<Detection> detectedLanguges = _translator.DetectLanguages(texts);
+                foreach (var srt in fileDetails.Select((val, i) => (val, i)))
+                {
+                    srt.val.LanguageCode = detectedLanguges[srt.i].Language;
+                    _applicationContext.FileManagement.Add(srt.val);
                 }
                 await _applicationContext.SaveChangesAsync();
-                return Ok(new { filePaths });
+                return Ok();
             } catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex}");
             }
+        }
+
+        [HttpGet]
+        [Route("GetInputFiles")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<FileManagement>>> GetInputFiles()
+        {          
+            return await _applicationContext.FileManagement.Where(x => x.FileType == "input").ToListAsync();
         }
     }
 }

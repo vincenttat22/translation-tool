@@ -12,8 +12,11 @@ export class ApiService {
   getUserProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>("/api/UserProfile");
   }
-  uploadSRT(formData) {
-    return this.http.post('/api/UploadFile/Subtitile', formData, {reportProgress: true, observe: 'events'});
+  uploadSRT(formData: any) {
+    return this.http.post('/api/UploadFile', formData, {reportProgress: true, observe: 'events'});
+  }
+  GetInputFiles() {
+    return this.http.get('/api/UploadFile/GetInputFiles');
   }
   startTranslate() {
     return this.http.post('/api/Translation',{nothing:"for Now"});
