@@ -1,11 +1,11 @@
 export class FileManagement {
-  Id: number = 0;
-  UserId: string = "";
-  OriginalFileName: string = "";
-  FileName: string = "";
-  FilePath: string = "";
-  FileType: string = "";
-  LanguageCode: string = "";
-  CreatedDate: string = "";
-  LastUpdated: string = "";
+  id: number = 0;
+  userId: string = "";
+  originalFileName: string = "";
+  fileName: string = "";
+  filePath: string = "";
+  fileType: string = "";
+  languageCode: string = "";
+  createdDate: string = "";
+  lastUpdated: string = "";
 }

@@ -1,9 +1,31 @@
-<div class="container">
-  <div class="row">
-    <div class="col-sm-12">
-      <h4>Translation</h4>
-    </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <h4>Translation</h4>
+  <div class="collapse navbar-collapse" class="fileManagerNavbar">
+    <ul class="navbar-nav mr-auto">
+      
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faMinus"></fa-icon></button></li>
+      <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faTimes"></fa-icon></button></li>
+  </ul>
   </div>
+</nav>
+<nav id="fileManager-menu" style="padding: 0 !important;" class="navbar navbar-expand-lg navbar-light bg-white">
+  <div class="collapse navbar-collapse" class="fileManagerNavbar">
+    <ul class="navbar-nav mr-auto">
+      <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faChevronLeft"></fa-icon></button></li>
+        <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faChevronRight"></fa-icon></button></li>
+        <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faSync"></fa-icon></button></li>
+        <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faUpload"></fa-icon></button></li>
+        <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faCog"></fa-icon></button></li>
+        <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faLanguage"></fa-icon></button></li>
+        <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faDownload"></fa-icon></button></li>
+    </ul>
+   
+  </div>
+</nav>
+<mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+<div class="container-fluid">
   <div class="row">
     <div class="col-sm-6 upload-section">
       <div>
@@ -19,30 +41,30 @@
         </span>
       </div>
       <div class="input-list">
-        <table mat-table [dataSource]="fileManagements">
+        <table mat-table [dataSource]="inputFiles">
         
           <!-- Position Column -->
-          <ng-container matColumnDef="position">
+          <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef> <input type="checkbox" value=""/> </th>
-            <td mat-cell *matCellDef="let element"> <input type="checkbox" value=""/> </td>
+            <td mat-cell *matCellDef="let element"> <input type="checkbox" value="{{element.id}}"/> </td>
           </ng-container>
       
           <!-- Name Column -->
-          <ng-container matColumnDef="name">
+          <ng-container matColumnDef="originalFileName">
             <th mat-header-cell *matHeaderCellDef> File Name </th>
-            <td mat-cell *matCellDef="let element"> {{element.OriginalFileName}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.originalFileName}} </td>
           </ng-container>
       
           <!-- Weight Column -->
-          <ng-container matColumnDef="weight">
+          <ng-container matColumnDef="languageCode">
             <th mat-header-cell *matHeaderCellDef> Language Code </th>
-            <td mat-cell *matCellDef="let element"> {{element.LanguageCode}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.languageCode}} </td>
           </ng-container>
       
           <!-- Symbol Column -->
-          <ng-container matColumnDef="symbol">
+          <ng-container matColumnDef="createdDate">
             <th mat-header-cell *matHeaderCellDef> Created Date </th>
-            <td mat-cell *matCellDef="let element"> {{element.CreatedDate}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.createdDate | date:"dd-MM-yyyy hh:mm:ss"}} </td>
           </ng-container>
       
           <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>

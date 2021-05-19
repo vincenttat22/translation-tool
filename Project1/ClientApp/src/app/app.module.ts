@@ -16,7 +16,8 @@ import { AdminComponent } from './admin/admin.component';
 import { ApiService } from './services/api.service';
 import { TranslationToolComponent } from './translation-tool/translation-tool.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule } from '@angular/material';
+import { MatTableModule, MatProgressBarModule } from '@angular/material';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [		
@@ -34,6 +35,8 @@ import { MatTableModule } from '@angular/material';
     AvatarModule,
     NgbModule,
     MatTableModule,
+    MatProgressBarModule,
+    FontAwesomeModule,
     RouterModule.forRoot([
       {
         path: "",
