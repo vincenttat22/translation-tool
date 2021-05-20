@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 import { Token, UserProfile } from '../models/login.model';
+import { UserFolder } from '../models/userFolder.model';
 
 @Injectable()
 export class ApiService {
@@ -11,6 +12,9 @@ export class ApiService {
   constructor(private http: HttpClient) { }
   getUserProfile(): Observable<UserProfile> {
     return this.http.get<UserProfile>("/api/UserProfile");
+  }
+  getUserFolders(): Observable<UserFolder[]> {
+    return this.http.get<UserFolder[]>("/api/UserProfile/GetUserFolders");
   }
   uploadSRT(formData: any) {
     return this.http.post('/api/UploadFile', formData, {reportProgress: true, observe: 'events'});
@@ -22,7 +26,6 @@ export class ApiService {
     return this.http.post('/api/Translation',{nothing:"for Now"});
   }
   emitNavbarUpdate() {
-    console.log("UPDATE CALLED")
     this.callNavbarUpdate.next(1);
   }
 }

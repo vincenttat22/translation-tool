@@ -31,9 +31,10 @@ namespace Project1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AuthenticationContext>();
             services.AddDbContext<AuthenticationContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("MyConnections")));
             services.AddDbContext<ApplicationContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("MyConnections")));
-            services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<AuthenticationContext>();
+            //services.AddDefaultIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AuthenticationContext>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<ITranslator, Translator>();
             services.AddTransient<ISrtEditor, SrtEditor>();
@@ -42,7 +43,6 @@ namespace Project1
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-            
             services.Configure<IdentityOptions>(opts =>
             {
                 opts.Password.RequireDigit = false;
@@ -60,7 +60,7 @@ namespace Project1
             }).AddJwtBearer(x=>
             {
                 x.RequireHttpsMetadata = false;
-                x.SaveToken = false;
+                x.SaveToken = true;
                 x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,

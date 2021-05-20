@@ -1,6 +1,5 @@
 .upload-section {
-    border-radius: 5px;
-    border: 1px solid #495056;
+    border-left: 1px solid #495056;
     padding-top: 5px;
     padding-bottom: 5px;
 }
@@ -16,7 +15,7 @@
     color: #1669bb;
   }
   .input-list {
-    height: 400px;
+    height: calc(100vh - 240px);
     overflow: auto;
   }
   
@@ -42,4 +41,39 @@
   #fileManager-menu {
     box-shadow: 0 0.25rem 4.75rem rgb(0 0 0 / 5%);
     margin-bottom: 15px;
+  }
+
+  .btn-treenode:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  .btn-treenode {
+    padding: 0;
+    width: 100%;
+    text-align: left;
+  }
+  .mat-tree-node fa-icon {
+    margin-right: 5px;
+  }
+
+  .mat-tree-node {
+    min-height: 30px;
+  }
+
+  .selected-node {
+    background: #212529;
+    color: white;
+  }
+
+  .item-folder fa-icon{
+    font-size: 100px;
+  }
+
+  .item-folder {
+    text-align: center;
+  }
+
+  .selected-item-folder {
+    background: #212529;
+    color: white;
   }

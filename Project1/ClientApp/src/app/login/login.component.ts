@@ -15,9 +15,18 @@ export class LoginComponent implements OnInit {
     Password: "",
   };
   errorMessage: string = '';
+  waitingInitiateLogin = true;
   constructor(private authGuard: AuthGuard,private apiService: ApiService, private router: Router) {}
 
   ngOnInit() {
+    this.authGuard.initiateLogin().subscribe(
+      (res:any) => {
+        this.waitingInitiateLogin = false;
+      },
+      (err) => {
+        this.errorMessage = err.error.message;  
+      }
+    );
     if(this.authGuard.canActivate) {
       this.router.navigate(['/home']);
     }

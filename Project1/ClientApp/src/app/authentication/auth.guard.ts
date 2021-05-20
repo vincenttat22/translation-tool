@@ -25,6 +25,10 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
+  initiateLogin() {
+    return this.http.get("/api/ApplicationUser/Initiate");
+  }
+
   login(formData: {}) {
     return this.http.post("/api/ApplicationUser/Login", formData);
   }

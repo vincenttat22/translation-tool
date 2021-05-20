@@ -30,6 +30,7 @@
     "@nguniversal/module-map-ngfactory-loader": "8.1.1",
     "bootstrap": "^4.6.0",
     "core-js": "^3.8.3",
+    "hammerjs": "^2.0.8",
     "ngx-avatar": "^4.1.0",
     "node-sass": "^5.0.0",
     "oidc-client": "^1.11.3",
