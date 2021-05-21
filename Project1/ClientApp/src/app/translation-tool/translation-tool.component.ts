@@ -87,7 +87,7 @@ export class TranslationToolComponent implements OnInit {
     const combineFolderLanguge$ = combineLatest(this.getUserFolders$,this.service.languages$).pipe(switchMap(([userFolders,languages])=>{
       userFolders.map(root=> 
          root.children.map(folder => folder.files.map(file=> {
-          file.lanague = languages.filter(val=>val.code == file.languageCode)[0].name;
+          file.language = languages.filter(val=>val.code == file.languageCode)[0].name;
           return file;
         }))
       )

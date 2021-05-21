@@ -6,7 +6,7 @@ export class FileManagement {
   filePath: string = "";
   fileType: string = "";
   languageCode: string = "";
-  lanague: string = "";
+  language: string = "";
   createdDate: string = "";
   lastUpdated: string = "";
 }
