@@ -29,11 +29,9 @@ export class NavMenuComponent implements OnInit{
   updateNavbar() {
     if(localStorage.getItem('token') != null) {
       this.showNavBar = true;
-      const userProfile$: Observable<UserProfile>  = this.apiService.getUserProfile();
-      userProfile$.subscribe(val => { 
+      this.apiService.userProfile$.subscribe(val => { 
         this.userProfile = val
-        this.userFullName = `${val.firstName} ${val.lastName}`,
-        take(1)
+        this.userFullName = `${val.firstName} ${val.lastName}`
       })
     } else {
       this.showNavBar = false;

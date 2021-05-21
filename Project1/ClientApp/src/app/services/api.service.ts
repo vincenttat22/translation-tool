@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { catchError, shareReplay } from 'rxjs/operators';
+import { Languge } from '../models/file.model';
 
 import { Token, UserProfile } from '../models/login.model';
 import { UserFolder } from '../models/userFolder.model';
@@ -9,9 +11,14 @@ import { UserFolder } from '../models/userFolder.model';
 export class ApiService {
   private callNavbarUpdate = new Subject<any>();
   callNavbarUpdate$ = this.callNavbarUpdate.asObservable();
-  constructor(private http: HttpClient) { }
-  getUserProfile(): Observable<UserProfile> {
-    return this.http.get<UserProfile>("/api/UserProfile");
+  private userProfile = new BehaviorSubject<UserProfile>(new UserProfile());
+  userProfile$ =  this.userProfile.asObservable();
+  private languages = new BehaviorSubject<Languge[]>([]);
+  languages$ = this.languages.asObservable();
+
+  constructor(private http: HttpClient) { 
+    this.userProfile$ = this.http.get<UserProfile>("/api/UserProfile").pipe(shareReplay(1));
+    this.languages$ = this.http.get<Languge[]>('/api/Translation/GetLanguages').pipe(shareReplay(1));
   }
   getUserFolders(): Observable<UserFolder[]> {
     return this.http.get<UserFolder[]>("/api/UserProfile/GetUserFolders");

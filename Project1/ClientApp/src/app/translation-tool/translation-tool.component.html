@@ -15,18 +15,18 @@
     <ul class="navbar-nav mr-auto">
       <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faChevronLeft"></fa-icon></button></li>
         <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faChevronRight"></fa-icon></button></li>
-        <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faSync"></fa-icon></button></li>
-        <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faUpload"></fa-icon></button></li>
-        <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faCog"></fa-icon></button></li>
-        <li><button class="btn btn-light" (click)="onTranslate()"><fa-icon [icon]="awesomeIcon.faLanguage"></fa-icon></button></li>
-        <li><button class="btn btn-light" (click)="file.click()"><fa-icon [icon]="awesomeIcon.faDownload"></fa-icon></button>
+        <li><button class="btn btn-light" (click)="getUserFolders.next()"><fa-icon [icon]="awesomeIcon.faSync"></fa-icon></button></li>
+        <li><button class="btn btn-light" (click)="file.click()"><fa-icon [icon]="awesomeIcon.faUpload"></fa-icon></button>
           <input type="file" #file placeholder="Choose file" multiple (change)="uploadFile(file.files)" style="display:none;">
         </li>
+        <li><button class="btn btn-light"><fa-icon [icon]="awesomeIcon.faCog"></fa-icon></button></li>
+        <li><button class="btn btn-light" (click)="onTranslate()"><fa-icon [icon]="awesomeIcon.faLanguage"></fa-icon></button></li>
+        <li><button class="btn btn-light" (click)="onDownLoadFiles()" ><fa-icon [icon]="awesomeIcon.faDownload"></fa-icon></button></li>
     </ul>
    
   </div>
 </nav>
-<mat-progress-bar mode="determinate" value="{{progress}}"></mat-progress-bar>
+<mat-progress-bar *ngIf="progress > 0" mode="determinate" value="{{progress}}"></mat-progress-bar>
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-3">
@@ -54,8 +54,10 @@
         
           <!-- Position Column -->
           <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef> <input type="checkbox" value=""/> </th>
-            <td mat-cell *matCellDef="let element"> <input type="checkbox" value="{{element.id}}"/> </td>
+            <th mat-header-cell *matHeaderCellDef> <mat-checkbox (change)="onClickCheckboxAllFile($event)" [checked]="allFileChecked"></mat-checkbox> </th>
+            <td mat-cell *matCellDef="let element"> 
+              <mat-checkbox [checked]="selectedFileIds.indexOf(element.id) > -1" (click)="onClickCheckboxFile($event,element.id)" value="{{element.id}}"></mat-checkbox>
+            </td>
           </ng-container>
       
           <!-- Name Column -->
@@ -66,23 +68,22 @@
       
           <!-- Weight Column -->
           <ng-container matColumnDef="languageCode">
-            <th mat-header-cell *matHeaderCellDef> Language Code </th>
-            <td mat-cell *matCellDef="let element"> {{element.languageCode}} </td>
+            <th mat-header-cell *matHeaderCellDef> Language </th>
+            <td mat-cell *matCellDef="let element"> {{element.lanague}} </td>
           </ng-container>
       
           <!-- Symbol Column -->
           <ng-container matColumnDef="createdDate">
-            <th mat-header-cell *matHeaderCellDef> Created Date </th>
-            <td mat-cell *matCellDef="let element"> {{element.createdDate | date:"dd-MM-yyyy hh:mm:ss"}} </td>
+            <th mat-header-cell *matHeaderCellDef> Date modified </th>
+            <td mat-cell *matCellDef="let element"> {{element.lastUpdated | date:"dd-MM-yyyy hh:mm:ss"}} </td>
           </ng-container>
       
           <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.selected-item-folder]="selectedFileIds.indexOf(row.id) > -1" (click)="onSelectFile(row.id)"></tr>
         </table>
-        <div *ngIf="selectedNodeId.indexOf('put') == -1" class="container">
+        <div *ngIf="selectedNodeId !='' && selectedNodeId.indexOf('put') == -1" class="container">
           <div class="row">
-            <!--Not DONE YET-->
-            <div *ngFor="let f of userFolders" class="col-sm-3 item-folder" [class.selected-item-folder]="selectedFolder=='input'" (dblclick)="onDbclickItemFolder('input')">
+            <div *ngFor="let f of userFolders" class="col-sm-3 item-folder" [class.selected-item-folder]="selectedFolder==f.id" (click)="onClickItemFolder(f.id)" (dblclick)="onDbclickItemFolder(f.id)">
               <fa-icon [icon]="awesomeIcon.faFolder"></fa-icon>
               <h4>{{f.name}}</h4>
             </div>

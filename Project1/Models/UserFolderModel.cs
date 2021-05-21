@@ -10,5 +10,14 @@ namespace Project1.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public List<UserFolderModel> Children { get; set; }
+        public List<UserFileModel> Files { get; set; }
+    }
+
+    public class UserFileModel
+    {
+        public int Id { get; set; }
+        public string OriginalFileName { get; set; }
+        public string LanguageCode { get; set; }
+        public DateTime LastUpdated { get; set; }
     }
 }

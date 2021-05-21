@@ -56,6 +56,7 @@ namespace Project1.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("GetLanguages")]
         public IActionResult GetLanguages()
         {
             IList<Language> languages = _translator.GetLanguages();

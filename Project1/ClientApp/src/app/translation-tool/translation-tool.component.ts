@@ -1,13 +1,15 @@
 import { HttpClient, HttpEventType } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import { combineLatest, Observable, Subject } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
-import { FileManagement } from "../models/file.model";
+import { FileManagement, Languge } from "../models/file.model";
 import { ApiService } from "../services/api.service";
 import { faChevronLeft, faChevronRight, faMinus, faTimes, faSync, faLanguage, faCog, faDownload, faUpload, faFolder } from '@fortawesome/free-solid-svg-icons';
 import { FlatTreeControl } from "@angular/cdk/tree";
-import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material";
+import { MatCheckboxChange, MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material";
 import { UserFolder } from "../models/userFolder.model";
+import { notDeepEqual } from "assert";
+import { UserProfile } from "../models/login.model";
 
 
 /** Flat node with expandable and level information */
@@ -42,42 +44,71 @@ export class TranslationToolComponent implements OnInit {
 
   folderTreeSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-  public progress: number;
-  public uploadDone: boolean = false;
+  public progress: number = 0;
   public inputFiles: FileManagement[];
   public selectedNodeId: string = "";
   public selectedFolder: string = "";
+  public selectedFileIds: number[] = [];
+  public allFileChecked: boolean = false;
   public userFolders: UserFolder[] = [];
+  public translationLanguages: Languge[] = [];
+  private userProfile: UserProfile;
   displayedColumns = ['id', 'originalFileName', 'languageCode', 'createdDate'];
   
   constructor(private service: ApiService) {
   }
   hasChild = (_: number, node: FileFlatNode) => node.expandable;
-  requestUploadSRT: Subject<string> = new Subject<string>();
-  requestUploadSRT$ = this.requestUploadSRT.asObservable();
+  getUserFolders: Subject<string> = new Subject<string>();
+  getUserFolders$: Observable<UserFolder[]>;
   awesomeIcon = {faChevronLeft:faChevronLeft, faChevronRight: faChevronRight, faMinus: faMinus, faTimes: faTimes, faSync: faSync, faLanguage: faLanguage, faCog: faCog, faDownload: faDownload, faUpload: faUpload, faFolder: faFolder}
   
   ngOnInit() {
-    this.requestUploadSRT$ = this.requestUploadSRT.pipe(
-      switchMap((val) => {
-        switch (val) {
-          case "input":
-            return this.service.GetInputFiles().pipe(
-              map((files: FileManagement[]) => {
-                this.inputFiles = files;
-                return val;
-              })
-            );
-        }
+    this.service.userProfile$.subscribe(val=> {
+      this.userProfile = val;
+    })
+    this.getUserFolders$ = this.getUserFolders.pipe(
+      switchMap((action) => {
+        return this.service.getUserFolders().pipe(map(val=>{
+          switch(action) {
+            case "input":
+            case "output":
+              var nodeId = this.userProfile.id+"/"+action;
+              this.selectedNodeId = nodeId;
+              this.selectChildNode(nodeId);
+              break;
+            default:
+              this.resetTreeNode();
+          }
+          return val;
+        }));
       })
     );
-    this.requestUploadSRT$.subscribe();
-    this.requestUploadSRT.next("input");
-    const getUserFolders$: Observable<UserFolder[]> = this.service.getUserFolders().pipe(map(val=>{
-      this.folderTreeSource.data = val;
-      return val;
+
+    const combineFolderLanguge$ = combineLatest(this.getUserFolders$,this.service.languages$).pipe(switchMap(([userFolders,languages])=>{
+      userFolders.map(root=> 
+         root.children.map(folder => folder.files.map(file=> {
+          file.lanague = languages.filter(val=>val.code == file.languageCode)[0].name;
+          return file;
+        }))
+      )
+      this.translationLanguages = languages;
+      this.folderTreeSource.data = userFolders;
+      return userFolders;
     }));
-    getUserFolders$.subscribe();
+
+    combineFolderLanguge$.subscribe();
+    this.getUserFolders.next();
+    // this.getUserFolders$.subscribe();
+    // this.getUserFolders.next();
+    // this.service.languages$.subscribe(val=>{
+    //   this.translationLanguages = val;
+    // });
+  }
+  resetTreeNode() {
+    this.inputFiles = [];
+    this.selectedNodeId = "";
+    this.selectedFolder = "";
+    this.treeControl.collapseAll();
   }
   uploadFile(files: File[]) {
     if (files.length === 0) {
@@ -85,7 +116,6 @@ export class TranslationToolComponent implements OnInit {
     }
     let filesToUpload: File[] = files;
     const formData = new FormData();
-    this.uploadDone = false;
     Array.from(filesToUpload).map((file, index) => {
       return formData.append("file" + index, file, file.name);
     });
@@ -93,8 +123,8 @@ export class TranslationToolComponent implements OnInit {
       if (event.type === HttpEventType.UploadProgress)
         this.progress = Math.round((100 * event.loaded) / event.total);
       else if (event.type === HttpEventType.Response) {
-        this.uploadDone = true;
-        this.requestUploadSRT.next("input");
+        this.progress = 0;
+        this.getUserFolders.next("input");
       }
     });
   }
@@ -102,26 +132,56 @@ export class TranslationToolComponent implements OnInit {
     this.selectedNodeId = node.id;
     if(node.level == 0) {
       this.userFolders = this.getNodeChildren(node)[0].children;
+      this.selectedFolder = "";
+    } else {
+      this.selectChildNode(node.id);
     }
   }
-  onDbclickItemFolder(txt:string) {
-    var nodeIndex = this.getNodeIndex();
-    if(nodeIndex > -1) {
-      this.treeControl.expand(this.treeControl.dataNodes[nodeIndex]);
-      this.selectedNodeId += "-"+txt;
+  onClickCheckboxFile(event: MouseEvent,fileId: number) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.onSelectFile(fileId);
+  }
+  onClickCheckboxAllFile(event: MatCheckboxChange) {
+    this.allFileChecked = event.checked;
+    this.selectedFileIds = event.checked ? this.inputFiles.map(val=> val.id) : [];
+  }
+  onSelectFile(fileId: number) {
+    if(this.selectedFileIds.indexOf(fileId) == -1) 
+      this.selectedFileIds = [...this.selectedFileIds,fileId];
+     else 
+      this.selectedFileIds = this.selectedFileIds.filter(val=>val!=fileId);
+    
+    this.allFileChecked = this.inputFiles.length == this.selectedFileIds.length
+  }
+  selectChildNode(nodeId:string) {
+    var nodeIdSpit = nodeId.split("/");
+    var parentNodeId = nodeIdSpit[0];
+    var thisFolder = this.folderTreeSource.data.filter(x=>x.id == parentNodeId);
+    var thisFile = thisFolder[0].children.filter(x=> x.id == nodeId);
+    this.inputFiles = thisFile[0].files;
+    var nodeIndex = this.treeControl.dataNodes.findIndex((val)=>val.id == parentNodeId);
+    this.treeControl.expand(this.treeControl.dataNodes[nodeIndex]);
+  }
+  onClickItemFolder(nodeId:string) {
+    this.selectedFolder = nodeId;
+  }
+  onDbclickItemFolder(nodeId:string) {
+    if(nodeId != null) {
+      this.selectedNodeId = nodeId;
+      this.selectChildNode(nodeId);
     }
   }
   getNodeChildren(node:FileFlatNode) {
-    return this.folderTreeSource.data.map((val)=> {
-      if(val.id == node.id) {
-        return val;
-      }
-    })
+    return this.folderTreeSource.data.filter((val)=> val.id == node.id)
   }
-  getNodeIndex() {
-    return this.treeControl.dataNodes.findIndex((val)=>val.id == this.selectedNodeId);
-  }
+
   onTranslate() {
     this.service.startTranslate().subscribe();
+  }
+  onDownLoadFiles() {
+    this.service.userProfile$.subscribe(val=> {
+      console.log(val);
+    })
   }
 }
