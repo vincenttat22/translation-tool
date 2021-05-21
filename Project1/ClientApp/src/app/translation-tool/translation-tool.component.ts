@@ -84,7 +84,7 @@ export class TranslationToolComponent implements OnInit {
       })
     );
 
-    const combineFolderLanguge$ = combineLatest(this.getUserFolders$,this.service.languages$).pipe(switchMap(([userFolders,languages])=>{
+    const combineFolderLanguage$ = combineLatest(this.getUserFolders$,this.service.languages$).pipe(switchMap(([userFolders,languages])=>{
       userFolders.map(root=> 
          root.children.map(folder => folder.files.map(file=> {
           file.language = languages.filter(val=>val.code == file.languageCode)[0].name;
@@ -96,13 +96,8 @@ export class TranslationToolComponent implements OnInit {
       return userFolders;
     }));
 
-    combineFolderLanguge$.subscribe();
+    combineFolderLanguage$.subscribe();
     this.getUserFolders.next();
-    // this.getUserFolders$.subscribe();
-    // this.getUserFolders.next();
-    // this.service.languages$.subscribe(val=>{
-    //   this.translationLanguages = val;
-    // });
   }
   resetTreeNode() {
     this.inputFiles = [];
