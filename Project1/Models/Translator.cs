@@ -70,6 +70,7 @@ namespace Project1.Models
         public string OriginalFileName { get; set; }
         public string From { get; set; }
         public string To { get; set; }
+        public string ToCode { get; set; }
         public string State { get; set; }
     }
 }

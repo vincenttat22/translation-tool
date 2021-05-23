@@ -41,22 +41,30 @@ namespace Project1.Controllers
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> StartTranslate(TranslationQueue queue)
-        {
-            var timespan = TimeSpan.FromSeconds(5);
-
-            await Task.Delay(timespan);
-            return Ok(queue);
-            //var folderName = Path.Combine("Uploads", userId);
-            //var pathFolder = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            //var path = Path.Combine(pathFolder, "test.srt");
-            //SrtData mySrtModelList = _srtEditor.ParseSrt(path);
-            //var language = "zh-CN";
-            //IList<TranslationResult> translatedText  = _translator.TranslateListText(mySrtModelList.srtStrings, language);
-            //_srtEditor.WriteSrt(mySrtModelList.SrtModels, translatedText, pathFolder);
-            //return Ok(new { translatedText });
+        {       
+            var file = await _applicationContext.FileManagement.FindAsync(queue.FileId);
+            SrtData mySrtModelList = _srtEditor.ParseSrt(file.FilePath);
+            var folderName = Path.Combine("Uploads", userId);
+            var pathFolder = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            IList<TranslationResult> translatedText = _translator.TranslateListText(mySrtModelList.srtStrings, queue.ToCode);
+            var dbPath = _srtEditor.WriteSrt(mySrtModelList.SrtModels, translatedText, pathFolder);
+            var fileName = Path.GetFileName(dbPath);
+            var OriginalFileName = Path.GetFileNameWithoutExtension(queue.OriginalFileName) + "_" + queue.ToCode + Path.GetExtension(queue.OriginalFileName);
+            FileManagement fileManagement = new()
+            {
+                UserId = userId,
+                OriginalFileName = OriginalFileName,
+                FileName = fileName,
+                FilePath = dbPath,
+                FileType = "output",
+                CreatedBy = userId,
+                CreatedDate = DateTime.UtcNow
+            };
+            _applicationContext.FileManagement.Add(fileManagement);
+            await _applicationContext.SaveChangesAsync();
+            return Ok(fileManagement);
         }
-
-       
+  
 
         [HttpGet]
         [Authorize]

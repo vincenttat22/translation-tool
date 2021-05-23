@@ -99,7 +99,7 @@ namespace Project1.Controllers
                     {
                         new Claim("UserId", user.Id.ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddDays(1),
+                    Expires = DateTime.UtcNow.AddDays(5),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Value.Jwt_key)), SecurityAlgorithms.HmacSha256Signature)
                 };
                 var tokenHanlder = new JwtSecurityTokenHandler();

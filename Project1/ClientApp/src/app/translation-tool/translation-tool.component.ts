@@ -240,7 +240,8 @@ export class TranslationToolComponent implements OnInit {
               originalFileName: fileId.originalFileName,
               from: fileId.language,
               to: languageName,
-              state: "pending"
+              toCode: lang,
+              state: "pending",
             })
           })
         })

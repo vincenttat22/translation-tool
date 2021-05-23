@@ -21,5 +21,6 @@ export class TranslationQueue {
   originalFileName: string = "";
   from: string = "";
   to: string = "";
+  toCode: string = "";
   state: string = "";
 }

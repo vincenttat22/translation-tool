@@ -76,6 +76,7 @@ namespace Project1.Controllers
                         FileName = fileName,
                         FilePath = dbPath,
                         FileType = "input",
+                        CreatedBy = userId,
                         CreatedDate = DateTime.UtcNow
                     });
                 }
