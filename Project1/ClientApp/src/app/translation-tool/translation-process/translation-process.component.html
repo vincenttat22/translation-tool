@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<mat-progress-bar mode="determinate" value="{{progress}}"></mat-progress-bar>
+<mat-expansion-panel [expanded]=true>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        File name
+      </mat-panel-title>
+      <mat-panel-description>
+        Translate to
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <table id="translating-list">
+      <tbody>
+        <tr *ngFor="let f of data.translationQueues" [class.text-blur]="f.state == 'pending'">
+          <td>{{f.originalFileName}}</td>
+          <td>{{f.from}} to {{f.to}}</td>
+          <td><mat-spinner [diameter]="20" *ngIf="f.state == 'processing'"></mat-spinner>
+            <fa-icon [icon]="faCheck" *ngIf="f.state == 'complete'"></fa-icon>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-expansion-panel>
+  <div class="mat-dialog-buttons">
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="data.translationQueues" cdkFocusInitial [disabled]="data.title != 'Complete' ">Download now</button>
+  </div>

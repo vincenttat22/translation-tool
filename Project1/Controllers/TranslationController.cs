@@ -40,16 +40,20 @@ namespace Project1.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult StartTranslate()
+        public async Task<ActionResult> StartTranslate(TranslationQueue queue)
         {
-            var folderName = Path.Combine("Uploads", userId);
-            var pathFolder = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            var path = Path.Combine(pathFolder, "test.srt");
-            SrtData mySrtModelList = _srtEditor.ParseSrt(path);
-            var language = "zh-CN";
-            IList<TranslationResult> translatedText  = _translator.TranslateListText(mySrtModelList.srtStrings, language);
-            _srtEditor.WriteSrt(mySrtModelList.SrtModels, translatedText, pathFolder);
-            return Ok(new { translatedText });
+            var timespan = TimeSpan.FromSeconds(5);
+
+            await Task.Delay(timespan);
+            return Ok(queue);
+            //var folderName = Path.Combine("Uploads", userId);
+            //var pathFolder = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            //var path = Path.Combine(pathFolder, "test.srt");
+            //SrtData mySrtModelList = _srtEditor.ParseSrt(path);
+            //var language = "zh-CN";
+            //IList<TranslationResult> translatedText  = _translator.TranslateListText(mySrtModelList.srtStrings, language);
+            //_srtEditor.WriteSrt(mySrtModelList.SrtModels, translatedText, pathFolder);
+            //return Ok(new { translatedText });
         }
 
        

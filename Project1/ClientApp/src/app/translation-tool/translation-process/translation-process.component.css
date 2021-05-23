@@ -1,0 +1,23 @@
+.mat-dialog-buttons {
+    width: 100%;
+    text-align: right;
+    margin-top: 5px;
+}
+mat-panel-title {
+    width: 53.5%;
+}
+#translating-list {
+    width: 100%;
+}
+
+#translating-list td:nth-child(1) {
+    width: 65%;
+}
+
+#translating-list tr {
+    height: 25px;
+}
+
+.text-blur {
+    opacity: .4;
+}

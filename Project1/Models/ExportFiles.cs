@@ -35,4 +35,8 @@ namespace Project1.Models
             this.CreatedDate = DateTime.UtcNow;
         }
     }
+    public class DownloadParametter
+    {
+        public List<int> filesIds { get; set; }
+    }
 }

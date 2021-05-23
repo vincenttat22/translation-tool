@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { catchError, shareReplay } from 'rxjs/operators';
-import { Languge } from '../models/file.model';
+import { Languge, TranslationQueue } from '../models/file.model';
 
 import { Token, UserProfile } from '../models/login.model';
 import { UserFolder } from '../models/userFolder.model';
@@ -26,11 +26,14 @@ export class ApiService {
   uploadSRT(formData: any) {
     return this.http.post('/api/UploadFile', formData, {reportProgress: true, observe: 'events'});
   }
+  downloadSRT(fileIds: number[]) {
+    return this.http.post('/api/DownloadFIle',{filesIds: fileIds}, { responseType: 'blob'});
+  }
   GetInputFiles() {
     return this.http.get('/api/UploadFile/GetInputFiles');
   }
-  startTranslate() {
-    return this.http.post('/api/Translation',{nothing:"for Now"});
+  startTranslate(queue:TranslationQueue): Observable<TranslationQueue> {
+    return this.http.post<TranslationQueue>('/api/Translation',queue);
   }
   emitNavbarUpdate() {
     this.callNavbarUpdate.next(1);

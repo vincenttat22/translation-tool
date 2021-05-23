@@ -15,3 +15,11 @@ export class Languge {
   code: string = "";
   name: string = "";
 }
+
+export class TranslationQueue {
+  fileId: number = 0;
+  originalFileName: string = "";
+  from: string = "";
+  to: string = "";
+  state: string = "";
+}

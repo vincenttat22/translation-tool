@@ -63,4 +63,13 @@ namespace Project1.Models
             return results;
         }
     }
+
+    public class TranslationQueue
+    {
+        public int FileId { get; set; }
+        public string OriginalFileName { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
+        public string State { get; set; }
+    }
 }
