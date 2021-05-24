@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { catchError, shareReplay } from 'rxjs/operators';
-import { Languge, TranslationQueue } from '../models/file.model';
+import { catchError, map, shareReplay, switchMap } from 'rxjs/operators';
+import { FileManagement, Languge, TranslationQueue } from '../models/file.model';
 
 import { Token, UserProfile } from '../models/login.model';
 import { UserFolder } from '../models/userFolder.model';
@@ -15,12 +15,22 @@ export class ApiService {
   userProfile$ =  this.userProfile.asObservable();
   private languages = new BehaviorSubject<Languge[]>([]);
   languages$ = this.languages.asObservable();
+  private defaultLanguages = new Subject<any>();
+  defaultLanguages$: Observable<string[]>;
 
   constructor(private http: HttpClient) { 
     this.userProfile$ = this.http.get<UserProfile>("/api/UserProfile").pipe(shareReplay(1));
     this.languages$ = this.http.get<Languge[]>('/api/Translation/GetLanguages').pipe(shareReplay(1));
+    // this.defaultLanguages$ = this.http.get<string[]>('/api/Translation/GetDefaultLanguages');
+    this.defaultLanguages$ = this.http.get<string[]>('/api/Translation/GetDefaultLanguages');
   }
-  getUserFolders(): Observable<UserFolder[]> {
+  getDefaultLanguages() {
+    this.defaultLanguages.next();
+  }
+  updateDefaultLanguages(langagues:string[]) {
+    return this.http.post<any>('/api/Translation/UpdateDefaultLanguages',{langagues: langagues}).pipe(map(val=>val.responseTxt));
+  }
+  getUserFolders() {
     return this.http.get<UserFolder[]>("/api/UserProfile/GetUserFolders");
   }
   uploadSRT(formData: any) {
@@ -32,8 +42,8 @@ export class ApiService {
   GetInputFiles() {
     return this.http.get('/api/UploadFile/GetInputFiles');
   }
-  startTranslate(queue:TranslationQueue): Observable<TranslationQueue> {
-    return this.http.post<TranslationQueue>('/api/Translation',queue);
+  startTranslate(queue:TranslationQueue): Observable<FileManagement> {
+    return this.http.post<FileManagement>('/api/Translation',queue);
   }
   emitNavbarUpdate() {
     this.callNavbarUpdate.next(1);

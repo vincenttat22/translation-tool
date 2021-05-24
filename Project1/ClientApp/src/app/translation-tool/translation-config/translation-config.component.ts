@@ -25,4 +25,7 @@ export class TranslationConfigComponent {
     onNoClick(): void {
       this.dialogRef.close();
     }
+    onSelectChange() {
+      console.log(this.data.defaultLanguages)
+    }
 }

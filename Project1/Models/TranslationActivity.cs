@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace Project1.Models
 {
-    public class ExportFiles
+    public class TranslationActivity
     {
         [Key]
         public int Id { get; set; }
-
-        [Column(TypeName = "nvarchar(450)")]
+        [Required]
+        [ForeignKey("ApplicationUser")]
         public string UserId { get; set; }
 
         [Column(TypeName = "nvarchar(50)")]
         public string OriginalFileName { get; set; }
 
         [Column(TypeName = "nvarchar(50)")]
-        public string ExportedFileName { get; set; }
+        public string TranslatedFileName { get; set; }
 
         [Column(TypeName = "nvarchar(10)")]
         public string TranslatedFromCode { get; set; }
@@ -30,10 +30,11 @@ namespace Project1.Models
         [Column(TypeName = "datetime2")]
         public DateTime CreatedDate { get; set; }
 
-        public ExportFiles()
+        public TranslationActivity()
         {
             this.CreatedDate = DateTime.UtcNow;
         }
+        public virtual ApplicationUser ApplicationUser { get; set; }
     }
     public class DownloadParametter
     {

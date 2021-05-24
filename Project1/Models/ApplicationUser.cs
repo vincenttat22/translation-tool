@@ -14,5 +14,7 @@ namespace Project1.Models
 
         [Column(TypeName = "nvarchar(50)")]
         public string LastName { get; set; }
+
+        public List<FileManagement> FileManagements { get; set; }
     }
 }

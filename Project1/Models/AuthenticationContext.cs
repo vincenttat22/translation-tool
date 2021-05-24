@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Project1.Models
 {
-    public class AuthenticationContext : IdentityDbContext<ApplicationUser>
-    {
-        public AuthenticationContext(DbContextOptions<AuthenticationContext> opts): base(opts)
-        {
+    //public class AuthenticationContext : IdentityDbContext<ApplicationUser>
+    //{
+    //    public AuthenticationContext(DbContextOptions<AuthenticationContext> opts): base(opts)
+    //    {
 
-        }
+    //    }
 
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-    }
+    //    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+    //}
 }

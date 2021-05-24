@@ -126,7 +126,7 @@ namespace Project1.Models
                     outputFile.WriteLine(srt.val.Index);
                     outputFile.WriteLine(srt.val.SrtTime);
                     outputFile.WriteLine(translationResults[srt.i].TranslatedText);
-                    outputFile.WriteLine(Environment.NewLine);
+                    outputFile.WriteLine();
                 }
             }
             return fileName;

@@ -12,7 +12,8 @@ namespace Project1.Models
         [Key]
         public int Id { get; set; }
 
-        [Column(TypeName = "nvarchar(450)")]
+        [Required]
+        [ForeignKey("ApplicationUser")]
         public string UserId { get; set; }
 
         [Column(TypeName = "nvarchar(200)")]
@@ -39,6 +40,7 @@ namespace Project1.Models
         [Column(TypeName = "datetime2")]
         public DateTime LastUpdated { get; set; }
 
+        public virtual ApplicationUser ApplicationUser { get; set; }
         public FileManagement()
         {
             this.LastUpdated = DateTime.UtcNow;

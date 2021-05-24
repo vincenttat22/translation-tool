@@ -23,5 +23,5 @@
   </mat-expansion-panel>
   <div class="mat-dialog-buttons">
     <button mat-button (click)="onNoClick()">Cancel</button>
-    <button mat-button [mat-dialog-close]="data.translationQueues" cdkFocusInitial [disabled]="data.title != 'Complete' ">Download now</button>
+    <button mat-button [mat-dialog-close]="completeFileIds" cdkFocusInitial [disabled]="data.title != 'Complete' ">Download now</button>
   </div>

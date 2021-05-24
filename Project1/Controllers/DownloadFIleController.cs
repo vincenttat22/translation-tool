@@ -37,7 +37,7 @@ namespace Project1.Controllers
             {
                 foreach(var file in files)
                 {
-                    var fileName = Path.GetFileNameWithoutExtension(file.OriginalFileName) + "_" + file.LanguageCode + "_" + file.FileName;
+                    var fileName = Path.GetFileNameWithoutExtension(file.OriginalFileName) + (file.FileType == "input" ? ( "_" + file.LanguageCode ) : "" ) + "_" + file.FileName;
                     var fileInArchive = zipArchive.CreateEntry(fileName, CompressionLevel.Optimal);
                     using var entryStream = fileInArchive.Open();
                     byte[] bytes = FileToByteArray(file.FilePath);

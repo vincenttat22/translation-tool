@@ -4,5 +4,10 @@ import { Injectable } from "@angular/core";
     providedIn: 'root'
 })
 export class TranslationMenu {
-
+    back = {
+        disabled : true,
+    }
+    forward = {
+        disabled : true
+    }
 }

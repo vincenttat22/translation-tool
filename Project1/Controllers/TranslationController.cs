@@ -41,13 +41,12 @@ namespace Project1.Controllers
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> StartTranslate(TranslationQueue queue)
-        {       
+        {
             var file = await _applicationContext.FileManagement.FindAsync(queue.FileId);
             SrtData mySrtModelList = _srtEditor.ParseSrt(file.FilePath);
-            var folderName = Path.Combine("Uploads", userId);
-            var pathFolder = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var folderName = Path.GetDirectoryName(file.FilePath);
             IList<TranslationResult> translatedText = _translator.TranslateListText(mySrtModelList.srtStrings, queue.ToCode);
-            var dbPath = _srtEditor.WriteSrt(mySrtModelList.SrtModels, translatedText, pathFolder);
+            var dbPath = _srtEditor.WriteSrt(mySrtModelList.SrtModels, translatedText, folderName);
             var fileName = Path.GetFileName(dbPath);
             var OriginalFileName = Path.GetFileNameWithoutExtension(queue.OriginalFileName) + "_" + queue.ToCode + Path.GetExtension(queue.OriginalFileName);
             FileManagement fileManagement = new()
@@ -57,6 +56,7 @@ namespace Project1.Controllers
                 FileName = fileName,
                 FilePath = dbPath,
                 FileType = "output",
+                LanguageCode = queue.ToCode,
                 CreatedBy = userId,
                 CreatedDate = DateTime.UtcNow
             };
@@ -73,6 +73,40 @@ namespace Project1.Controllers
         {
             IList<Language> languages = _translator.GetLanguages();
             return Ok(languages);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("GetDefaultLanguages")]
+        public IActionResult GetDefaultLanguages()
+        {
+            IList<string> languages = _applicationContext.DefaultLanguages.Where(x => x.UserId == userId).Select(x => x.LanguageCode).ToList();
+            return Ok(languages);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("UpdateDefaultLanguages")]
+        public async Task<ActionResult> UpdateDefaultLanguages(DefaultLanguageParametters paras)
+        {
+            var languages = _applicationContext.DefaultLanguages.Where(x => x.UserId == userId);
+            var languagesStringArr = languages.Select(x => x.LanguageCode).ToList();
+            var ResponseTxt = "";
+            if (!paras.langagues.SequenceEqual(languagesStringArr))
+            {
+                _applicationContext.DefaultLanguages.RemoveRange(languages);
+                foreach(var lang in paras.langagues)
+                {
+                    _applicationContext.DefaultLanguages.Add(new DefaultLanguages()
+                    {
+                        UserId = userId,
+                        LanguageCode = lang
+                    });
+                }
+                await _applicationContext.SaveChangesAsync();
+                ResponseTxt = "updated";
+            }
+            return Ok(new { ResponseTxt });
         }
     }
 }

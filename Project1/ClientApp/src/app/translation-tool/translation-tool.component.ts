@@ -1,7 +1,7 @@
 import { HttpClient, HttpEventType } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
 import { combineLatest, Observable, Subject } from "rxjs";
-import { delay, map, switchMap, tap, timeout } from "rxjs/operators";
+import { delay, map, switchMap, take, takeLast, tap, timeout } from "rxjs/operators";
 import { FileManagement, Languge, TranslationQueue } from "../models/file.model";
 import { ApiService } from "../services/api.service";
 import { faChevronLeft, faChevronRight, faMinus, faTimes, faSync, faLanguage, faDownload, faUpload, faFolder } from '@fortawesome/free-solid-svg-icons';
@@ -55,6 +55,7 @@ export class TranslationToolComponent implements OnInit {
   public allFileChecked: boolean = false;
   public userFolders: UserFolder[] = [];
   public translationLanguages: Languge[] = [];
+  public defaultLanguages: string[] = [];
   private userProfile: UserProfile;
   public translationQueues: TranslationQueue[] = [];
 
@@ -62,7 +63,7 @@ export class TranslationToolComponent implements OnInit {
   }
   hasChild = (_: number, node: FileFlatNode) => node.expandable;
   getUserFolders: Subject<string> = new Subject<string>();
-  getUserFolders$: Observable<UserFolder[]>;
+  getUserFolders$: Observable<{action:string, userFolders: UserFolder[]}>;
   awesomeIcon = { faFolder: faFolder}
   
 
@@ -101,26 +102,17 @@ export class TranslationToolComponent implements OnInit {
     this.service.userProfile$.subscribe(val=> {
       this.userProfile = val;
     })
-    this.getUserFolders$ = this.getUserFolders.pipe(
-      switchMap((action) => {
-        return this.service.getUserFolders().pipe(map(val=>{
-          switch(action) {
-            case "input":
-            case "output":
-              var nodeId = this.userProfile.id+"/"+action;
-              this.selectedNodeId = nodeId;
-              this.selectChildNode(nodeId);
-              break;
-            default:
-              this.resetTreeNode();
-          }
-          return val;
-        }));
-      })
-    );
+    this.getUserFolders$ = this.getUserFolders.pipe(switchMap(action => 
+      this.service.getUserFolders().pipe(map(userFolders => {
+        return {
+          action: action,
+          userFolders: userFolders
+        }
+      }))
+    ));
 
-    const combineFolderLanguage$ = combineLatest(this.getUserFolders$,this.service.languages$).pipe(switchMap(([userFolders,languages])=>{
-      userFolders.map(root=> 
+    const combineFolderLanguage$ = combineLatest(this.getUserFolders$,this.service.languages$).pipe(switchMap(([{action,userFolders},languages])=>{
+        userFolders.map(root=> 
          root.children.map(folder => folder.files.map(file=> {
           file.language = languages.filter(val=>val.code == file.languageCode)[0].name;
           return file;
@@ -128,29 +120,47 @@ export class TranslationToolComponent implements OnInit {
       )
       this.translationLanguages = languages;
       this.folderTreeSource.data = userFolders;
+      this.resetTreeNode(action);
       return userFolders;
     }));
 
     combineFolderLanguage$.subscribe();
     this.getUserFolders.next();
-
+    this.service.defaultLanguages$.subscribe(x=>{
+      this.defaultLanguages = x;
+    });
   }
-  
-  resetTreeNode() {
-    this.inputFiles = [];
-    this.selectedNodeId = "";
-    this.selectedFolder = "";
-    this.treeControl.collapseAll();
+
+  resetTreeNode(action:string = "") {
+    switch(action) {
+      case "input":
+      case "output":
+        var nodeId = this.userProfile.id+"/"+action;
+        this.selectedNodeId = nodeId;
+        this.selectChildNode(nodeId);
+        break;
+      default:
+        this.inputFiles = [];
+        this.selectedNodeId = "";
+        this.selectedFolder = "";
+        this.treeControl.collapseAll();
+    }
+    this.selectedFileIds = [];
+    this.allFileChecked = false;
+    this.updateMenuButtonState();
   }
   onDownLoadFiles() {
     if(this.selectedFileIds.length > 0) {
-      var selectFileIds = this.selectedFileIds.map(file=>file.id)
-      this.service.downloadSRT(selectFileIds).subscribe(data => {
-        saveAs(data,'srt_files.zip');
-      });
+      var selectFileIds = this.selectedFileIds.map(file=>file.id);
+      this.downloadFile(selectFileIds);
     }   
   }
-  uploadFile(files: File[]) {
+  downloadFile(files:number[]) {
+    this.service.downloadSRT(files).subscribe(data => {
+      saveAs(data,'srt_files.zip');
+    });
+  }
+  oUploadFile(files: File[]) {
     if (files.length === 0) {
       return;
     }
@@ -180,6 +190,7 @@ export class TranslationToolComponent implements OnInit {
   updateMenuButtonState() {
     var disabled = this.selectedFileIds.length == 0;
     this.menu.translate.disabled = disabled;
+    this.menu.download.disabled = disabled;
   }
   onClickCheckboxFile(event: MouseEvent,fileId: FileManagement) {
     event.preventDefault();
@@ -224,10 +235,18 @@ export class TranslationToolComponent implements OnInit {
     return this.translationLanguages.filter(val=>val.code == languageCode)[0].name
   }
   
+  updateDefaultLanguages(languages: string[]) {
+    this.service.updateDefaultLanguages(languages).subscribe(val => {
+      if(val == 'updated') {
+        this.defaultLanguages = languages;
+      }
+    });
+  }
+
   openTranslateConfigDialog(): void {
     const dialogRef = this.dialog.open(TranslationConfigComponent, {
       width: '350px',
-      data: {title: "Choose languages", translationLanguages: this.translationLanguages, defaultLanguages:["zh-CN","zh-TW"]}
+      data: {title: "Choose languages", translationLanguages: this.translationLanguages, defaultLanguages: this.defaultLanguages}
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result && result.length > 0) {
@@ -245,6 +264,7 @@ export class TranslationToolComponent implements OnInit {
             })
           })
         })
+        this.updateDefaultLanguages(result)
         this.openTranslateProcessDialog();
       }
     });
@@ -258,7 +278,8 @@ export class TranslationToolComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result && result.length > 0) {
-        console.log('The dialog was closed',result)
+        this.downloadFile(result);
+        this.getUserFolders.next("output");
       }
     });
   }

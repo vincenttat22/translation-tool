@@ -31,8 +31,8 @@ namespace Project1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AuthenticationContext>();
-            services.AddDbContext<AuthenticationContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("MyConnections")));
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
+            //services.AddDbContext<AuthenticationContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("MyConnections")));
             services.AddDbContext<ApplicationContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("MyConnections")));
             //services.AddDefaultIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AuthenticationContext>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
