@@ -65,75 +65,7 @@ namespace Project1.Controllers
             return Ok("true");
         }
 
-        [HttpPost]
-        [Route("Register")]
-        public async Task<IActionResult> PostApplicationUser(ApplicationUserModel user)
-        {
-            var applicationUser = new ApplicationUser()
-            {
-                UserName = user.UserName,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName
-            };
-            try
-            {
-                var result = await _userManager.CreateAsync(applicationUser, user.Password);
-                await _userManager.AddToRolesAsync(applicationUser, user.Roles);
-                return Ok(result);
-            } catch (Exception)
-            {       
-                throw ;
-            }
-        }
-
-        [HttpPost]
-        [Route("UpdateUser")]
-        public async Task<IActionResult> UserApplicationUser(ApplicationUserModel user)
-        {
-            var _user = await _userManager.FindByIdAsync(user.Id);
-            await _userManager.SetLockoutEnabledAsync(_user, false);
-            var _userRoles = _userManager.GetRolesAsync(_user).Result;
-            var diff = user.Roles.Except(_userRoles).ToArray();
-            var diff2 = _userRoles.Except(user.Roles).ToArray();
-            Console.WriteLine(diff);
-            Console.WriteLine(diff2);
-            if (user.Password != null)
-            {
-                _user.PasswordHash = _userManager.PasswordHasher.HashPassword(_user, user.Password);
-            }
-            _user.Email = user.Email;
-            _user.FirstName = user.FirstName;
-            _user.LastName = user.LastName;
-            try
-            {
-                var result = await _userManager.UpdateAsync(_user);
-                return Ok(result);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        [HttpPost]
-        [Route("CheckAvailableUserName")]
-        public async Task<IActionResult> CheckAvailableUserName(CheckAvailableUserModel user)
-        {
-            ApplicationUser _user = new();
-            if(user.UserName != null)
-            {
-                _user = await _userManager.FindByNameAsync(user.UserName);
-            } else if (user.Email != null)
-            {
-                _user = _userManager.Users.Where(x => x.Email == user.Email && x.Id != user.Id).FirstOrDefault();
-            }
-
-            return Ok(new
-            {
-                FoundUser = _user != null
-            });
-        }
+        
 
         [HttpPost]
         [Route("Login")]

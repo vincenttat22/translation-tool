@@ -17,5 +17,13 @@
 }
 
 .mat-table-col-action {
-    width: 155px;
+    width: 90px;
+}
+
+.blur-text {
+    opacity: .5;
+}
+
+.hide-all-slide {
+    margin-top: 19px;
 }

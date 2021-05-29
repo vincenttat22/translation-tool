@@ -36,14 +36,17 @@ export class ApiService {
   getUserFolders() {
     return this.http.get<UserFolder[]>("/api/UserProfile/GetUserFolders");
   }
-  getUseList() {
-    return this.http.get<UserProfile[]>("/api/UserList");
+  getUseList(hide:string = "") {
+    return this.http.get<UserProfile[]>("/api/User/List/"+hide);
   }
   checkAvailableUsername(paras:any) {
-    return this.http.post<{foundUser:boolean}>("/api/ApplicationUser/CheckAvailableUserName",paras);
+    return this.http.post<{foundUser:boolean}>("/api/User/CheckAvailableUserName",paras);
+  }
+  activateUser(formData:any): Observable<any> {
+    return this.http.patch('/api/User/ActivateUser',formData).pipe(map(val=>val),share());
   }
   addEditUser(formData: UserData): Observable<any> {
-    var url = formData.id == "" ? "/api/ApplicationUser/Register" : "/api/ApplicationUser/UpdateUser";
+    var url = formData.id == "" ? "/api/User/Register" : "/api/User/UpdateUser";
     return this.http.post(url, formData).pipe(map(val=>val),share());
   }
   uploadSRT(formData: any) {
