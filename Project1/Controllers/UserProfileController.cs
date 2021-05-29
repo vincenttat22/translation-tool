@@ -16,13 +16,15 @@ namespace Project1.Controllers
     public class UserProfileController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ApplicationContext _applicationContext;
         private readonly IOptions<AppSettings> _appSettings;
         private string userId = "";
-        public UserProfileController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationContext applicationContext, IOptions<AppSettings> appSettings, IHttpContextAccessor httpContextAccessor)
+        public UserProfileController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, SignInManager<ApplicationUser> signInManager, ApplicationContext applicationContext, IOptions<AppSettings> appSettings, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _signInManager = signInManager;
             _applicationContext = applicationContext;
             _appSettings = appSettings;
@@ -43,6 +45,15 @@ namespace Project1.Controllers
                 user.Email,
                 roles = roles.Result
             });
+        }
+
+        [HttpGet]
+        [Route("GetUserRoles")]
+        [Authorize]
+        public ActionResult GetUserRole()
+        {
+            var roles = _roleManager.Roles.Select(x => x.Name).ToList();      
+            return Ok(roles);
         }
 
         [HttpGet]

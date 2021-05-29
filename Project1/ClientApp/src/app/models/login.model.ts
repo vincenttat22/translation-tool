@@ -7,6 +7,8 @@ export class Token {
       firstName: string;
       lastName: string;
       email: string;
+      roles: string[];
+      lockoutEnabled: string;
       constructor(firstName = '', lastName = '', email = '') {
           this.firstName = firstName;
           this.lastName = lastName;

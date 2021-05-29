@@ -14,7 +14,18 @@ namespace Project1.Models
 
         [Column(TypeName = "nvarchar(50)")]
         public string LastName { get; set; }
+        public ICollection<ApplicationUserRole> UserRoles { get; set; }
 
-        public List<FileManagement> FileManagements { get; set; }
+    }
+
+    public class ApplicationRole : IdentityRole
+    {
+        public ICollection<ApplicationUserRole> UserRoles { get; set; }
+    }
+
+    public class ApplicationUserRole : IdentityUserRole<string>
+    {
+        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationRole Role { get; set; }
     }
 }

@@ -26,15 +26,15 @@
       background: white;
   }
   
-  .fileManagerNavbar fa-icon {
+  .bodyNavbar fa-icon {
     font-size: 22px;
   }
 
-  .fileManagerNavbar {
+  .bodyNavbar {
     width: 100%;
   }
 
-  .fileManagerNavbar .navbar-right {
+  .bodyNavbar .navbar-right {
     float: right;
   }
 

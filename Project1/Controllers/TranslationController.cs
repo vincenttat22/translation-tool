@@ -71,8 +71,34 @@ namespace Project1.Controllers
         [Route("GetLanguages")]
         public IActionResult GetLanguages()
         {
-            IList<Language> languages = _translator.GetLanguages();
-            return Ok(languages);
+            var languages = _applicationContext.SupportLangagues.ToList();
+            if(languages.FirstOrDefault() == null)
+            {
+                IList<Language> mlanguages = RenewSupportLanguages();
+                return Ok(mlanguages);
+            } else
+            {
+                return Ok(languages);
+            }
+        }
+
+        private IList<Language> RenewSupportLanguages()
+        {
+            IList<Language> mlanguages = _translator.GetLanguages();
+            foreach (var l in mlanguages)
+            {
+                _applicationContext.SupportLangagues.Add(new()
+                {
+                    Code = l.Code,
+                    Name = l.Name
+                });
+            }
+            _applicationContext.SupportLangagueVersion.Add(new()
+            {
+                CurrentVersion = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString()
+            });
+            _applicationContext.SaveChangesAsync();
+            return mlanguages;
         }
 
         [HttpGet]

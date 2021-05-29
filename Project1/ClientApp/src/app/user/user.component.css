@@ -1,0 +1,24 @@
+.bodyNavbar {
+  width: 100%;
+}
+
+.bodyNavbar .navbar-right {
+  float: right;
+}
+
+
+.mat-tab-group {
+  height: calc( 100vh - 200px) !important;
+}
+
+
+::-webkit-scrollbar {
+  width: 8px;
+  overflow-y: scroll;
+  background: #f8f9fa;
+}
+
+::-webkit-scrollbar-thumb {
+  background: grey;
+  border-radius: 10px;
+}

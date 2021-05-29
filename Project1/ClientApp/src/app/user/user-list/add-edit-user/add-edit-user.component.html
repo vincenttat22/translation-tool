@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<form #form='ngForm' class="" novalidate (ngSubmit)="onSubmitUserData(form)" autocomplete="off">
+  <input type="hidden" name="id" #id="ngModel" [(ngModel)]="formModel.id" value="">
+  <mat-form-field class="full-width">
+    <mat-label>Username</mat-label>
+    <input name="userName" #userName="ngModel" (ngModelChange)="onKeywordChange($event,'userName')" [(ngModel)]="formModel.userName" matInput required value="" [disabled]="data.title == 'Edit User'">
+    <mat-error *ngIf="userName.invalid && userName.value != '' ">This Username has been taken.</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Email</mat-label>
+    <input name="email" #email="ngModel" (ngModelChange)="onKeywordChange($event,'email')" [(ngModel)]="formModel.email" type="email" email matInput required value="">
+    <mat-error *ngIf="email.invalid && email.value != '' && email.errors.message">This Email has been taken.</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Password</mat-label>
+    <input name="password" #password="ngModel" [(ngModel)]="formModel.password" type="password" [required]="data.userData == null" matInput value="">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>First Name</mat-label>
+    <input name="firstName" #firstName="ngModel" [(ngModel)]="formModel.firstName" matInput required value="">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Last Name</mat-label>
+    <input name="lastName" #lastName="ngModel" [(ngModel)]="formModel.lastName" matInput required value="">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <mat-label>Assign roles</mat-label>
+    <mat-select name="roles" #roles="ngModel" [(ngModel)]="formModel.roles"  multiple required>
+      <mat-option *ngFor="let role of roleList" [value]="role">{{role}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="mat-dialog-buttons">
+    <button type="button" mat-button (click)="onNoClick()">Cancel</button>
+    <button type="submit" mat-button [disabled]="form.invalid" >Save</button>
+  </div>
+</form>

@@ -1,0 +1,21 @@
+.mat-table {
+    overflow: auto;
+    width: 100%;
+}
+.mat-table > thead, .mat-table > tbody {
+    width: 100%;
+}
+
+.add-new-user {
+    margin-top: 10px;
+}
+
+.search-input {
+    width: 300px;
+    margin: 0 8px;
+    float: right;
+}
+
+.mat-table-col-action {
+    width: 155px;
+}

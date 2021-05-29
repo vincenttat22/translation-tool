@@ -1,16 +1,16 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <h4>Translation</h4>
-  <div class="collapse navbar-collapse" class="fileManagerNavbar">
+  <div class="collapse navbar-collapse bodyNavbar">
     <ul class="navbar-nav mr-auto">
       
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li><button class="btn btn-light"><fa-icon [icon]="menu.close.icon"></fa-icon></button></li>
+      <li><button class="btn btn-light" [routerLink]="['/home']"><mat-icon aria-hidden="false">close</mat-icon></button></li>
   </ul>
   </div>
 </nav>
 <nav id="fileManager-menu" style="padding: 0 !important;" class="navbar navbar-expand-lg navbar-light bg-white">
-  <div class="collapse navbar-collapse" class="fileManagerNavbar">
+  <div class="collapse navbar-collapse bodyNavbar">
     <ul class="navbar-nav mr-auto">
       <li><button class="btn btn-light" [disabled]="menu.back.disabled"><fa-icon [icon]="menu.back.icon"></fa-icon></button></li>
         <li><button class="btn btn-light" [disabled]="menu.forward.disabled"><fa-icon [icon]="menu.forward.icon"></fa-icon></button></li>

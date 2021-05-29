@@ -10,30 +10,37 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './authentication/auth.guard';
 import { AvatarModule } from 'ngx-avatar';
-import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthInterceptor } from './authentication/auth.interceptor';
-import { AdminComponent } from './admin/admin.component';
 import { ApiService } from './services/api.service';
 import { TranslationToolComponent } from './translation-tool/translation-tool.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule, MatProgressBarModule, MatTreeModule, MatIconModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatSelectModule, MatButtonModule, MatExpansionModule, MatProgressSpinnerModule } from '@angular/material';
+import { MatTableModule, MatProgressBarModule, MatTreeModule, MatIconModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatSelectModule, MatButtonModule, MatExpansionModule, MatProgressSpinnerModule, MatTabsModule, MatInputModule, MatSlideToggleModule } from '@angular/material';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslationConfigComponent } from './translation-tool/translation-config/translation-config.component';
 import { TranslationProcessComponent } from './translation-tool/translation-process/translation-process.component';
+import { UserComponent } from './user/user.component';
+import { UserListComponent } from './user/user-list/user-list.component';
+import { UserRolesComponent } from './user/user-roles/user-roles.component';
+import { AddEditUserComponent } from './user/user-list/add-edit-user/add-edit-user.component';
 
 @NgModule({
   entryComponents: [
     TranslationConfigComponent,
-    TranslationProcessComponent],
+    TranslationProcessComponent,
+    AddEditUserComponent],
   declarations: [			
     AppComponent,
     NavMenuComponent,
     HomeComponent,
     LoginComponent,
-    AdminComponent,
+    UserComponent,
+    UserListComponent,
+    UserRolesComponent,
     TranslationToolComponent,
     TranslationConfigComponent,
-    TranslationProcessComponent
+    TranslationProcessComponent,
+    AddEditUserComponent
      ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -48,10 +55,14 @@ import { TranslationProcessComponent } from './translation-tool/translation-proc
     MatIconModule,
     MatDialogModule,
     MatFormFieldModule,
+    MatInputModule,
     MatCheckboxModule,
     MatSelectModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
+    MatTabsModule,
+    MatIconModule,
+    MatSlideToggleModule,
     FontAwesomeModule,
     MatButtonModule,
     RouterModule.forRoot([
@@ -66,8 +77,8 @@ import { TranslationProcessComponent } from './translation-tool/translation-proc
         canActivate: [AuthGuard]
       },
       {
-        path: "admin",
-        component: AdminComponent,
+        path: "user",
+        component: UserComponent,
         canActivate: [AuthGuard]
       },
       {

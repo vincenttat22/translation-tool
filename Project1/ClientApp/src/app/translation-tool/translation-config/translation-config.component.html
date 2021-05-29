@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <mat-form-field appearance="fill" style="width: 100%;">
   <mat-label>Languages</mat-label>
-  <mat-select [(ngModel)]="data.defaultLanguages" multiple (change)="onSelectChange()">
+  <mat-select [(ngModel)]="data.defaultLanguages" multiple>
     <mat-option *ngFor="let l of data.translationLanguages" [value]="l.code">{{l.name}}</mat-option>
   </mat-select>
 </mat-form-field>

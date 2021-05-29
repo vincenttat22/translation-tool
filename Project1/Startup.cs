@@ -31,10 +31,8 @@ namespace Project1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
-            //services.AddDbContext<AuthenticationContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("MyConnections")));
+            services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<ApplicationContext>();
             services.AddDbContext<ApplicationContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("MyConnections")));
-            //services.AddDefaultIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AuthenticationContext>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<ITranslator, Translator>();
             services.AddTransient<ISrtEditor, SrtEditor>();
@@ -50,6 +48,8 @@ namespace Project1
                 opts.Password.RequireUppercase = false;
                 opts.Password.RequireLowercase = false;
                 opts.Password.RequiredLength = 4;
+                opts.User.RequireUniqueEmail = true;
+                opts.Lockout.MaxFailedAccessAttempts = 5;
             });
             services.Configure<AppSettings>(Configuration.GetSection("ApplicationSettings"));
             var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:Jwt_key"].ToString());
