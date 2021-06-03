@@ -51,8 +51,9 @@ namespace Project1.Controllers
                 try
                 {
                     var roleRS = await _roleManager.CreateAsync(role);
+                    var claimRS = await _roleManager.AddClaimAsync(role, new Claim("AllAccess", "all_access"));
                     var userRS = await _userManager.CreateAsync(applicationUser, "Rea!!yStr0ng");
-                    if(userRS.Succeeded && roleRS.Succeeded)
+                    if(userRS.Succeeded && roleRS.Succeeded && claimRS.Succeeded)
                     {
                         var rs = await _userManager.AddToRoleAsync(applicationUser, "Admin");
                     }

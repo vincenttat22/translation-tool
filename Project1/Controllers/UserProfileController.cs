@@ -52,7 +52,7 @@ namespace Project1.Controllers
         [Authorize]
         public ActionResult GetUserRole()
         {
-            var roles = _roleManager.Roles.Select(x => x.Name).ToList();      
+            var roles = _roleManager.Roles.OrderBy(x=>x.Name).Select(x => x.Name).ToList();      
             return Ok(roles);
         }
 

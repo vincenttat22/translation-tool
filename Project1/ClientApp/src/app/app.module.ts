@@ -15,21 +15,24 @@ import { AuthInterceptor } from './authentication/auth.interceptor';
 import { ApiService } from './services/api.service';
 import { TranslationToolComponent } from './translation-tool/translation-tool.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule, MatProgressBarModule, MatTreeModule, MatIconModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatSelectModule, MatButtonModule, MatExpansionModule, MatProgressSpinnerModule, MatTabsModule, MatInputModule, MatSlideToggleModule } from '@angular/material';
+import { MatTableModule, MatProgressBarModule, MatTreeModule, MatIconModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatSelectModule, MatButtonModule, MatExpansionModule, MatProgressSpinnerModule, MatTabsModule, MatInputModule, MatSlideToggleModule, MatCardModule, MatListModule, MatSnackBarModule } from '@angular/material';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslationConfigComponent } from './translation-tool/translation-config/translation-config.component';
 import { TranslationProcessComponent } from './translation-tool/translation-process/translation-process.component';
 import { UserComponent } from './user/user.component';
 import { UserListComponent } from './user/user-list/user-list.component';
-import { UserRolesComponent } from './user/user-roles/user-roles.component';
+import { AddRoleDialog, UserRolesComponent } from './user/user-roles/user-roles.component';
 import { AddEditUserComponent } from './user/user-list/add-edit-user/add-edit-user.component';
+import { ConfirmationDialog } from './confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   entryComponents: [
     TranslationConfigComponent,
     TranslationProcessComponent,
-    AddEditUserComponent],
-  declarations: [			
+    AddEditUserComponent,
+    AddRoleDialog,
+    ConfirmationDialog],
+  declarations: [				
     AppComponent,
     NavMenuComponent,
     HomeComponent,
@@ -40,8 +43,10 @@ import { AddEditUserComponent } from './user/user-list/add-edit-user/add-edit-us
     TranslationToolComponent,
     TranslationConfigComponent,
     TranslationProcessComponent,
-    AddEditUserComponent
-     ],
+    AddEditUserComponent,
+    AddRoleDialog,
+    ConfirmationDialog
+   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
@@ -63,8 +68,11 @@ import { AddEditUserComponent } from './user/user-list/add-edit-user/add-edit-us
     MatTabsModule,
     MatIconModule,
     MatSlideToggleModule,
+    MatListModule,
     FontAwesomeModule,
     MatButtonModule,
+    MatSnackBarModule,
+    MatCardModule,
     RouterModule.forRoot([
       {
         path: "",

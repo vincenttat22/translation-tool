@@ -1,0 +1,40 @@
+.add-role {
+  margin-top: 10px;
+}
+.role-top-menu {
+  height: 62px;
+}
+
+.mat-list-user-role,
+.content-user-role {
+  height: calc(100vh - 286px);
+  padding: 5px;
+  overflow-y: auto;
+}
+
+.mat-list-user-role-wrapper,
+.content-user-role-wrapper {
+  padding: 5px;
+}
+
+.selected-role {
+  background: #eff3f7;
+}
+.listitem-input {
+  width: 100%;
+}
+.listitem-icon-group {
+  width: 100%;
+  text-align: right;
+}
+.mat-icon-button {
+  padding: 0;
+  width: 30px;
+  height: 40px;
+}
+
+.mat-card-editrole {
+    padding-top: 7px;
+    padding-bottom: 0px;
+    border-radius: 0;
+}

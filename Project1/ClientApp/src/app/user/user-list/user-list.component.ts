@@ -12,7 +12,7 @@ import { AddEditUserComponent, UserData } from './add-edit-user/add-edit-user.co
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
-  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'roles','lockoutEnabled', 'id'];
+  displayedColumns: string[] = ['icon', 'name', 'email', 'roles','lockoutEnabled', 'id'];
   dataSource:UserProfile[] = [];
   ngUnscubscribe = new Subject<void>();
   getUserList = new Subject<string>();

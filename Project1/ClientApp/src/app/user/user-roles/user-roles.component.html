@@ -1,3 +1,104 @@
-<p>
-  user-roles works!
-</p>
+<div class="container">
+  <div class="row role-top-menu" >
+    <div class="col-sm-12">
+      <button class="add-role" mat-raised-button color="primary" (click)="openAddRole()"><mat-icon>person_add</mat-icon> New Role</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4 mat-list-user-role">
+      <div  class="mat-elevation-z8">
+        <mat-list style="padding-top: 0;" role="list">
+          <div *ngFor="let u of roleList">
+            <mat-list-item role="listitem" [class.selected-role]="selectedRole == u" (click)="onSelectRole(u)">{{u}} 
+              <div class="listitem-icon-group">
+                <button mat-icon-button color="primary" (click)="$event.stopPropagation(); onDeleteRole(u)" [hidden]="u == 'Admin'"><mat-icon>delete</mat-icon></button>
+              </div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+          </div> 
+        </mat-list>
+      </div>    
+    </div>
+    <div class="col-sm-8 content-user-role">
+      <mat-accordion *ngIf="selectedRole != ''">
+        <mat-card class="mat-card-editrole">
+          <mat-form-field>
+            <input matInput placeholder="Role" [(ngModel)]="selectedEditRole" [disabled]="selectedRole == 'Admin'">
+          </mat-form-field>
+          <button mat-icon-button color="primary" (click)="onSaveRole()" [hidden]="selectedRole == 'Admin'"><mat-icon>save</mat-icon></button>
+        </mat-card>
+        <mat-expansion-panel class="mat-elevation-z8">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Home
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-selection-list [(ngModel)]="selectedOptions.Home" (ngModelChange)="onPermissionChange($event,'Home')" [disabled]="selectedRole == 'Admin'">
+            <mat-list-option value="show_translation">
+              View Translation
+              <mat-panel-description>Show | hide Translation tool</mat-panel-description>
+            </mat-list-option> 
+            <mat-list-option value="show_userlist_role">
+              View User
+              <mat-panel-description>Show | hide User list & User role</mat-panel-description>
+            </mat-list-option>
+            <mat-list-option value="show_userwork_outline">
+              View Work outline
+              <mat-panel-description>Show | hide User work outline</mat-panel-description>
+            </mat-list-option>
+          </mat-selection-list>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="mat-elevation-z8">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Users
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-selection-list [(ngModel)]="selectedOptions.User" (ngModelChange)="onPermissionChange($event,'User')" [disabled]="selectedRole == 'Admin'">
+            <div>
+              <mat-label>Tabs</mat-label>
+              <mat-list-option value="show_userlist">
+                View User List
+                <mat-panel-description>Show | hide User List tab</mat-panel-description>
+              </mat-list-option> 
+              <mat-list-option value="show_userroles">
+                View User Roles
+                <mat-panel-description>Show | hide User Roles tab</mat-panel-description>
+              </mat-list-option>
+            </div>
+            <div style="margin-top: 10px;">
+              <mat-label>User List</mat-label>
+              <mat-list-option value="create">
+                Create
+                <mat-panel-description>Create users</mat-panel-description>
+              </mat-list-option> 
+              <mat-list-option value="edit">
+                Edit
+                <mat-panel-description>Edit users</mat-panel-description>
+              </mat-list-option>
+              <mat-list-option value="deactivate"> 
+                Deactivate
+                <mat-panel-description>Activate | deactivate users</mat-panel-description>
+              </mat-list-option>
+            </div>
+            <div style="margin-top: 10px;">
+              <mat-label>User Roles</mat-label>
+              <mat-list-option value="create_userrole">
+                Create
+                <mat-panel-description>Create user roles</mat-panel-description>
+              </mat-list-option> 
+              <mat-list-option value="edit_userrole">
+                Edit
+                <mat-panel-description>Edit user roles</mat-panel-description>
+              </mat-list-option>
+              <mat-list-option value="delete_userrole">
+                Delete
+                <mat-panel-description>Delete user roles</mat-panel-description>
+              </mat-list-option>
+            </div>
+          </mat-selection-list>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { catchError, exhaustMap, map, share, shareReplay, switchMap } from 'rxjs
 import { FileManagement, Languge, TranslationQueue } from '../models/file.model';
 
 import { Token, UserProfile } from '../models/login.model';
+import { Permission } from '../models/user.model';
 import { UserFolder } from '../models/userFolder.model';
 import { UserData } from '../user/user-list/add-edit-user/add-edit-user.component';
 
@@ -30,9 +31,6 @@ export class ApiService {
   updateDefaultLanguages(langagues:string[]) {
     return this.http.post<any>('/api/Translation/UpdateDefaultLanguages',{langagues: langagues}).pipe(map(val=>val.responseTxt));
   }
-  getUserRoles() {
-    return this.http.get<string[]>("/api/UserProfile/GetUserRoles");
-  }
   getUserFolders() {
     return this.http.get<UserFolder[]>("/api/UserProfile/GetUserFolders");
   }
@@ -41,6 +39,24 @@ export class ApiService {
   }
   checkAvailableUsername(paras:any) {
     return this.http.post<{foundUser:boolean}>("/api/User/CheckAvailableUserName",paras);
+  }
+  addUserRole(formData:any): Observable<any> {
+    return this.http.post('/api/User/AddEditRole',formData).pipe(map(val=>val),share());
+  }
+  editUserRole(formData:any): Observable<any> {
+    return this.http.put('/api/User/AddEditRole',formData).pipe(map(val=>val),share());
+  }
+  deleteUserRole(formData:any): Observable<any> {
+    return this.http.delete('/api/User/AddEditRole/'+formData).pipe(map(val=>val),share());
+  }
+  getUserRoles() {
+    return this.http.get<string[]>("/api/UserProfile/GetUserRoles");
+  }
+  updateRolePermissions(formData: any): Observable<any> {
+    return this.http.patch("/api/User/UpdateRolePermissions/",formData);
+  }
+  getRolePermissions(roleName: string) {
+    return this.http.get<Permission[]>("/api/User/GetRolePermissions/"+roleName);
   }
   activateUser(formData:any): Observable<any> {
     return this.http.patch('/api/User/ActivateUser',formData).pipe(map(val=>val),share());

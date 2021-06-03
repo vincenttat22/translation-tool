@@ -35,8 +35,8 @@ export class LoginComponent implements OnInit {
     this.authGuard.login(form.value).subscribe(
       (res: any) => {
         localStorage.setItem("token", res.token);
-        this.router.navigateByUrl('/home');
-        this.apiService.emitNavbarUpdate();
+        window.location.href= "/home";
+        // this.apiService.emitNavbarUpdate();
       },
       (err) => {
         if(err.status == 400) {
